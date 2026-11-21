@@ -296,6 +296,8 @@ dependencies {
 
     implementation(project(":library"))
     implementation(project(":shared"))
+    implementation("io.github.g0dkar:qrcode-kotlin:4.1.1")
+    implementation("org.nanohttpd:nanohttpd:2.3.1")
 }
 
 tasks.register<Jar>("androidSourcesJar") {

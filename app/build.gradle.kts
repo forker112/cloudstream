@@ -296,7 +296,7 @@ dependencies {
 
     implementation(project(":library"))
     implementation(project(":shared"))
-    implementation("io.github.g0dkar:qrcode-kotlin:4.1.1")
+    implementation("com.journeyapps:zxing-android-embedded:4.3.0")
     implementation("org.nanohttpd:nanohttpd:2.3.1")
 }
 

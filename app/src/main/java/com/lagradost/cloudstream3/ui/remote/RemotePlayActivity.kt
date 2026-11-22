@@ -1,14 +1,16 @@
 package com.lagradost.cloudstream3.ui.remote
 
-import android.graphics.BitmapFactory
+import android.graphics.Bitmap
 import android.os.Bundle
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import com.google.zxing.BarcodeFormat
+import com.google.zxing.qrcode.QRCodeWriter
+import com.journeyapps.barcodescanner.BarcodeEncoder
 import com.lagradost.cloudstream3.R
 import com.lagradost.cloudstream3.network.RemotePlayServer
 import com.lagradost.cloudstream3.utils.getLocalIpAddress
-import qrcode.render.QRCode
 
 class RemotePlayActivity : AppCompatActivity() {
 
@@ -32,10 +34,11 @@ class RemotePlayActivity : AppCompatActivity() {
         tvStatus.text = "Connect to: $url"
 
         try {
-            // qrcode-kotlin লাইব্রেরি ব্যবহার করে QR কোড তৈরি
-            val qrCode = QRCode.ofSquares().build(url)
-            val pngBytes = qrCode.render() 
-            val bitmap = BitmapFactory.decodeByteArray(pngBytes, 0, pngBytes.size)
+            // ZXing দিয়ে QR কোড তৈরি
+            val writer = QRCodeWriter()
+            val bitMatrix = writer.encode(url, BarcodeFormat.QR_CODE, 400, 400)
+            val barcodeEncoder = BarcodeEncoder()
+            val bitmap = barcodeEncoder.createBitmap(bitMatrix)
             ivQrCode.setImageBitmap(bitmap)
         } catch (e: Exception) {
             tvStatus.text = "Failed to generate QR Code: ${e.message}"

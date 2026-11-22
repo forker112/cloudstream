@@ -76,14 +76,23 @@
                 style="@style/SettingsItem"
 
                 android:nextFocusUp="@id/settings_player"
-                android:nextFocusDown="@id/settings_ui"
+                android:nextFocusDown="@id/settings_remote_play"
                 android:text="@string/category_providers" />
+
+            <!-- 👇 নতুন যোগ করা Play on TV (Remote) বাটন 👇 -->
+            <TextView
+                android:id="@+id/settings_remote_play"
+                style="@style/SettingsItem"
+                android:nextFocusUp="@id/settings_providers"
+                android:nextFocusDown="@id/settings_ui"
+                android:text="Play on TV (Remote)" />
+            <!-- 👆 নতুন বাটন শেষ 👆 -->
 
             <TextView
                 android:id="@+id/settings_ui"
                 style="@style/SettingsItem"
 
-                android:nextFocusUp="@id/settings_providers"
+                android:nextFocusUp="@id/settings_remote_play"
                 android:nextFocusDown="@id/settings_updates"
                 android:text="@string/category_ui" />
 

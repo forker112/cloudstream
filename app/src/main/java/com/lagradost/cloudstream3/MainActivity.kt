@@ -1202,6 +1202,7 @@ class MainActivity : AppCompatActivity(), ColorPickerDialogListener, BiometricCa
         setNavigationBarColorCompat(R.attr.primaryGrayBackground)
         updateLocale()
         super.onCreate(savedInstanceState)
+        handleRemotePlayIntent(intent)
         try {
             if (isCastApiAvailable()) {
                 CastContext.getSharedInstance(this) { it.run() }
@@ -2083,4 +2084,14 @@ class MainActivity : AppCompatActivity(), ColorPickerDialogListener, BiometricCa
             false
         }
     }
+}
+override fun onNewIntent(intent: android.content.Intent) {
+    super.onNewIntent(intent)
+    handleRemotePlayIntent(intent)
+}
+
+private fun handleRemotePlayIntent(intent: android.content.Intent?) {
+    val videoUrl = intent?.getStringExtra("play_url") ?: return
+    android.widget.Toast.makeText(this, "লিংক পাওয়া গেছে: $videoUrl", android.widget.Toast.LENGTH_LONG).show()
+}
 }

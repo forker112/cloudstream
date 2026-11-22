@@ -241,6 +241,19 @@ class SettingsFragment : BaseFragment<MainSettingsBinding>(
                 }
             }
 
+            // 👇 নতুন যোগ করা Play on TV (Remote) বাটনের ক্লিক ইভেন্ট 👇
+            settingsRemotePlay.apply {
+                setOnClickListener {
+                    val intent = android.content.Intent(requireContext(), com.lagradost.cloudstream3.ui.remote.RemotePlayActivity::class.java)
+                    startActivity(intent)
+                }
+                if (isLayout(TV)) {
+                    isFocusable = true
+                    isFocusableInTouchMode = true
+                }
+            }
+            // 👆 নতুন কোড শেষ 👆
+
             // Default focus on TV
             if (isLayout(TV)) {
                 settingsGeneral.requestFocus()

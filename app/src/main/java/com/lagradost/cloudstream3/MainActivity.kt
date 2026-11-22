@@ -2084,14 +2084,15 @@ class MainActivity : AppCompatActivity(), ColorPickerDialogListener, BiometricCa
             false
         }
     }
-}
-override fun onNewIntent(intent: android.content.Intent) {
-    super.onNewIntent(intent)
-    handleRemotePlayIntent(intent)
-}
 
-private fun handleRemotePlayIntent(intent: android.content.Intent?) {
-    val videoUrl = intent?.getStringExtra("play_url") ?: return
-    android.widget.Toast.makeText(this, "লিংক পাওয়া গেছে: $videoUrl", android.widget.Toast.LENGTH_LONG).show()
-}
-}
+    // 👇 ফাংশনগুলো এখন ক্লাসের ভেতরে আছে 👇
+    override fun onNewIntent(intent: android.content.Intent) {
+        super.onNewIntent(intent)
+        handleRemotePlayIntent(intent)
+    }
+
+    private fun handleRemotePlayIntent(intent: android.content.Intent?) {
+        val videoUrl = intent?.getStringExtra("play_url") ?: return
+        android.widget.Toast.makeText(this, "লিংক পাওয়া গেছে: $videoUrl", android.widget.Toast.LENGTH_LONG).show()
+    }
+} // 👈 এই একটি মাত্র ব্র্যাকেট দিয়ে MainActivity ক্লাস শেষ হবে

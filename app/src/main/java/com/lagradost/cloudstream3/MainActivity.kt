@@ -2086,7 +2086,21 @@ class MainActivity : AppCompatActivity(), ColorPickerDialogListener, BiometricCa
         }
     }
     private fun handleRemotePlayIntent(intent: android.content.Intent?) {
-        val videoUrl = intent?.getStringExtra("play_url") ?: return
-        android.widget.Toast.makeText(this, "লিংক পাওয়া গেছে: $videoUrl", android.widget.Toast.LENGTH_LONG).show()
+    val videoUrl = intent?.getStringExtra("play_url") ?: return
+
+    // ভিডিওটি প্লে করার জন্য Player নেভিগেট করা
+    try {
+        val basicLink = com.lagradost.cloudstream3.ui.player.BasicLink(videoUrl, "Remote Play")
+        val generator = com.lagradost.cloudstream3.ui.player.LinkGenerator(listOf(basicLink), extract = true, id = videoUrl.hashCode())
+        
+        // সরাসরি প্লেয়ার স্ক্রিনে নিয়ে যাওয়ার কোড
+        this.navigate(
+            com.lagradost.cloudstream3.R.id.global_to_navigation_player,
+            com.lagradost.cloudstream3.ui.player.GeneratorPlayer.newInstance(generator, 0)
+        )
+    } catch (t: Throwable) {
+        // কোনো এরর হলে অ্যাপ ক্র্যাশ করবে না, শুধু মেসেজ দেখাবে
+        android.widget.Toast.makeText(this, "Error playing link: ${t.message}", android.widget.Toast.LENGTH_LONG).show()
     }
+}
 } // 👈 এই একটি মাত্র ব্র্যাকেট দিয়ে MainActivity ক্লাস শেষ হবে

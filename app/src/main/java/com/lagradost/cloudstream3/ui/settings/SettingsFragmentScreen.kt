@@ -138,12 +138,6 @@ object SettingsFragmentScreen : Screen {
                 R.string.pref_category_cache
             )
         ),
-        /*SettingsNavigation(
-            title = R.string.category_providers,
-            navigation = R.id.action_navigation_global_to_navigation_settings_providers,
-            screen = SettingsProvidersScreen,
-            icon = R.drawable.build_24px,
-        ),*/
         SettingsNavigation(
             title = R.string.category_ui,
             navigation = R.id.action_navigation_global_to_navigation_settings_ui,
@@ -196,13 +190,11 @@ object SettingsFragmentScreen : Screen {
         val subtitle: PersistentList<Int>,
     )
 
-
     @OptIn(ExperimentalMaterial3Api::class)
     @Composable
     @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
     override fun Content() {
         val textFieldState = rememberTextFieldState()
-
         val outerListState = rememberScrollState()
 
         val parentFirstScrollConnection = remember {
@@ -223,9 +215,7 @@ object SettingsFragmentScreen : Screen {
             Column(modifier = Modifier.verticalScroll(outerListState)) {
                 Spacer(modifier = Modifier.height(MaterialTheme.padding.small))
 
-                val default = DataStoreHelper.getDefaultAccount(
-                    LocalContext.current
-                )
+                val default = DataStoreHelper.getDefaultAccount(LocalContext.current)
                 val flow by DataStoreHelper.selectedAccountNumberFlow.collectAsState()
                 val account = remember(flow) {
                     DataStoreHelper.getCurrentAccount() ?: default
@@ -288,10 +278,22 @@ object SettingsFragmentScreen : Screen {
                             screens.forEach { settingsTab ->
                                 SettingsTab(settingsTab)
                             }
+                            
+                            // 👇 নতুন যোগ করা "Play on TV" বাটন 👇
+                            TextPreferenceWidget(
+                                title = "Play on TV (Remote)",
+                                icon = painterResource(R.drawable.play_arrow_24px),
+                                subtitle = "Scan QR code to send video to TV",
+                                onPreferenceClick = {
+                                    val intent = android.content.Intent(activity, com.lagradost.cloudstream3.ui.remote.RemotePlayActivity::class.java)
+                                    activity?.startActivity(intent)
+                                }
+                            )
+                            // 👆 নতুন কোড শেষ 👆
+
                             BuildStamp()
                         }
                     })
-
             }
         }
     }
@@ -321,13 +323,6 @@ object SettingsFragmentScreen : Screen {
             state = textFieldState,
             keyboardOptions = KeyboardOptions.Default.copy(
                 imeAction = ImeAction.Search,
-                /**
-                 * We do not want to pull up the keyboard when navigating to the item on TV, therefore
-                 * we listen to when the TV user presses some key to "extra" focus it
-                 *
-                 * showKeyboardOnFocus is somewhat bugged, so need to change this to true when you
-                 * press it, as otherwise no keyboard will show even with keyboardController
-                 * */
                 showKeyboardOnFocus = if (isTv) isWritable else true
             ),
             lineLimits = TextFieldLineLimits.SingleLine,
@@ -337,7 +332,6 @@ object SettingsFragmentScreen : Screen {
                 .focusOutline(enabled = isTv, CircleShape)
                 .onFocusChanged { newFocus ->
                     hasFocus = newFocus.hasFocus
-                    /** Loss of focus -> readonly */
                     if (!newFocus.hasFocus) {
                         isWritable = false
                     }
@@ -348,13 +342,11 @@ object SettingsFragmentScreen : Screen {
                         return@onPreviewKeyEvent false
                     }
 
-                    /** Focus + press once -> writable */
                     return@onPreviewKeyEvent when (keyEvent.key) {
                         Key.Enter, Key.DirectionCenter, Key.NumPadEnter, Key.Spacebar -> {
                             isWritable = true
                             true
                         }
-
                         else -> false
                     }
                 },
@@ -434,11 +426,9 @@ object SettingsFragmentScreen : Screen {
         TextPreferenceWidget(
             title = stringResource(settingsTab.title),
             icon = painterResource(settingsTab.icon),
-            // This can not be converted to joinToString due to stringResource being composable
             subtitle =
                 @Suppress("SimplifiableCallChain")
                 settingsTab.subtitle.map { stringResource(it) }.joinToString(),
-            // Clear it if we have already set it but navigated back instantly
             onPreferenceClick = {
                 SearchableSettings.highlightKey = null
                 activity?.navigate(settingsTab.navigation)
@@ -484,7 +474,6 @@ object SettingsFragmentScreen : Screen {
         }
     }
 }
-
 
 @PreviewLightDark
 @Composable

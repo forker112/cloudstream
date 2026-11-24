@@ -1509,6 +1509,25 @@ class CS3IPlayer : IPlayer {
             exoPlayer?.addListener(object : Player.Listener {
                 override fun onTracksChanged(tracks: Tracks) {
                     safe {
+                        // 👇 কোডেক চেক করার নতুন কোড 👇
+try {
+    val videoGroup = tracks.groups.firstOrNull { it.type == androidx.media3.common.C.TRACK_TYPE_VIDEO }
+    if (videoGroup != null && videoGroup.length > 0) {
+        val format = videoGroup.getTrackFormat(0)
+        val mime = format.sampleMimeType
+        if (mime != null) {
+            val codecName = when {
+                mime.contains("avc") -> "H.264 (AVC) - Safe"
+                mime.contains("hevc") -> "H.265 (HEVC) - Hot"
+                else -> mime
+            }
+            android.widget.Toast.makeText(context, "Codec: $codecName", android.widget.Toast.LENGTH_LONG).show()
+        }
+    }
+} catch (e: Exception) {
+    // কোনো এরর হলে অ্যাপ ক্র্যাশ করবে না
+}
+// 👆 নতুন কোড শেষ 👆
                         val textTracks = tracks.groups.filter { it.type == TRACK_TYPE_TEXT }
 
                         playerSelectedSubtitleTracks =

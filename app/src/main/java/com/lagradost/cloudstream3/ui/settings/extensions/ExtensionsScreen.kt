@@ -1527,7 +1527,7 @@ object ExtensionsScreen : Screen {
 
     @Composable
     fun RepositoryIcon(iconUrl: String?, defaultIcon: Painter) {
-        if (iconUrl != null) {
+        if (false) {
             AsyncImage(
                 model = remapUrl(url = iconUrl, size = 24.dp),
                 contentDescription = null,

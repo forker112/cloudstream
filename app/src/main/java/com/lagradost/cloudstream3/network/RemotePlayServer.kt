@@ -22,7 +22,6 @@ class RemotePlayServer(
             return newFixedLengthResponse(Response.Status.BAD_REQUEST, "text/plain", "Missing url")
         }
 
-        // ফোন থেকে পাঠানো হেডারগুলো রিসিভ করা
         val headersString = session.parameters["headers"]?.firstOrNull()
         val headerMap = mutableMapOf<String, String>()
         if (!headersString.isNullOrBlank()) {
@@ -34,7 +33,6 @@ class RemotePlayServer(
             }
         }
 
-        // প্রক্সি সার্ভার চালু করা (পোর্ট 8081)
         val proxyServer = VideoProxyServer(videoUrl, headerMap, 8081)
         try {
             proxyServer.start()
@@ -42,7 +40,6 @@ class RemotePlayServer(
             // ইতিমধ্যে চালু থাকলে সমস্যা নেই
         }
 
-        // প্লেয়ারকে প্রক্সি সার্ভারের লোকাল লিংকটি পাঠানো
         val ip = getLocalIpAddress() ?: "127.0.0.1"
         val proxyUrl = "http://$ip:8081/proxy"
 

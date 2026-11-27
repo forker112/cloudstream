@@ -2099,7 +2099,7 @@ class MainActivity : AppCompatActivity(), ColorPickerDialogListener, BiometricCa
             com.lagradost.cloudstream3.ui.player.GeneratorPlayer.newInstance(generator, 0)
         )
     } catch (t: Throwable) {
-        // কোনো এরর হলে অ্যাপ ক্র্যাশ করবে না, শুধু মেসেজ দেখাবে
+        // কোনো এরর হলে অ্যাপ ক্র্যাশ করবে না
         android.widget.Toast.makeText(this, "Error playing link: ${t.message}", android.widget.Toast.LENGTH_LONG).show()
     }
 }
